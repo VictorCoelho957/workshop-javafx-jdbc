@@ -9,6 +9,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	//referencia para a cena
+	private static Scene mainScene;
 	@Override
 	public void start(Stage primaryStage) {
 		try { //instancia do objeto
@@ -20,13 +22,17 @@ public class Main extends Application {
 
 			
 			
-			Scene mainScene = new Scene(scrollPane);//cena principal
+			 mainScene = new Scene(scrollPane);//cena principal
 			primaryStage.setScene(mainScene);
 			primaryStage.setTitle("Sample JavaFX application"); //titulo
 			primaryStage.show(); //palco da cena
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	//metodo para o mainscene ficar visivel nas outras classes
+	public static Scene getMainScene() {
+		return mainScene;
 	}
 
 	public static void main(String[] args) {
