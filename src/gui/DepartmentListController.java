@@ -50,7 +50,8 @@ public class DepartmentListController implements Initializable {
 	//eventos do botão
 	public void onBtNewAction(ActionEvent event) {
 		Stage parentStage= Utils. currentStage(event);
-		createDialogForm("/gui/DepartmentForm.fxml", parentStage);
+		Department obj =new Department();
+		createDialogForm(obj,"/gui/DepartmentForm.fxml", parentStage);
 	}
 	
 	//metodo set para ter dependencia do department service
@@ -60,7 +61,7 @@ public class DepartmentListController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		//inixiar componente nas tabelas
+		//iniciar componente nas tabelas
 		
 		initializeNodes();
 		
@@ -87,11 +88,16 @@ public class DepartmentListController implements Initializable {
 	}
 	
 	//metodo paa abrir um formulario de novo cadastro um novo departamneto
-	private void createDialogForm (String absoluteName , Stage parentStage) {
+	private void createDialogForm (Department obj, String absoluteName , Stage parentStage) {
 		try {
 			FXMLLoader loader= new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane=loader.load();
 			
+			//referencia para o controlador
+			DepartmentFormController controller =loader.getController();
+			controller.setDepartment(obj);
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateFormData();
 			Stage dialogStage= new Stage();
 			dialogStage.setTitle("Enter Department data");
 			dialogStage.setScene(new Scene(pane)); ;//janela
