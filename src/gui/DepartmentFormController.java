@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listener.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -20,6 +23,7 @@ import model.services.DepartmentService;
 //classe para contolorar as ações da classe department form design
 
 public class DepartmentFormController implements Initializable{
+	private List<DataChangeListener>dataChangeListeners = new ArrayList<>();
 	
 	private Department entity;
 	
@@ -52,22 +56,38 @@ public class DepartmentFormController implements Initializable{
 		//pegar os dados das caixinhas dos formularios e instanciar
 			entity=getFormData();
 			service.saveOrUpdate(entity);
+			//notificação de salvamento
+			notifyDataChangeListeners();
 			Utils.currentStage(event).close(); //fechar a janela
 		} catch(DbException e) {
 			Alerts.showAlert("Error saving object", null, e.getMessage(), Alert.AlertType.ERROR);
 		}
 	}
 	
+	private void notifyDataChangeListeners() {
+		for (DataChangeListener listener : dataChangeListeners) {
+			listener.onDataChanged();
+		}
+		
+	}
+
 	private Department getFormData() {
 		Department obj= new Department();
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
 		obj.setName(txtName.getText());
 		return obj;
 	}
+	
+	//metodo para receber a lista do chanlist
+	
+	public void subscribeDataChangeListerner(DataChangeListener listener) {
+		dataChangeListeners.add(listener);
+	}
 
 	@FXML
-	public void onBtCancelAction() {
-		System.out.println("onBtCancelAction");
+	public void onBtCancelAction(ActionEvent event) {
+		Utils.currentStage(event).close(); //fechar a janela
+
 	}
 	//metodo set do entity
 	public void setDepartment(Department entity) {
