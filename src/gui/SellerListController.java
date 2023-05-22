@@ -31,7 +31,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Seller;
-import model.entities.Seller;
 import model.services.SellerService;
 
 public class SellerListController implements Initializable, DataChangeListener {
